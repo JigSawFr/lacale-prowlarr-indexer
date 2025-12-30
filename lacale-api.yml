@@ -91,10 +91,13 @@ search:
     size:
       selector: size
     date:
+      # "pubDate": "2021-10-18T00:34:50.000000Z" is returned by Newtonsoft.Json.Linq as 18/10/2021 00:34:50
       selector: pubDate
       filters:
+        - name: append
+          args: " +00:00" # GMT
         - name: dateparse
-          args: "2006-01-02T15:04:05.999999999Z07:00"
+          args: "MM/dd/yyyy HH:mm:ss zzz"
     seeders:
       selector: seeders
     leechers:
