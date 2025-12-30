@@ -29,6 +29,9 @@
 > [!WARNING]
 > **⚓ VERSION BETA** — Ce navire est encore en construction dans le chantier naval. Signalez toute voie d'eau en [ouvrant un ticket](../../issues) !
 
+> [!CAUTION]
+> **🛡️ PROTECTION CLOUDFLARE** — En cas d'attaque DDoS, La Cale peut activer la protection anti-DDoS de Cloudflare, rendant temporairement l'indexer inopérant. En temps normal, l'API est exclue de cette protection. Si Cloudflare est actif, la seule solution est d'utiliser un proxy comme [Byparr](https://github.com/ThePhaseless/Byparr) ou [FlareSolverr](https://github.com/FlareSolverr/FlareSolverr).
+
 ---
 
 ## ✨ Équipements du navire
@@ -193,6 +196,22 @@ sudo systemctl restart prowlarr
 - 📝 Essayez une recherche plus large
 - 📦 Vérifiez que la cargaison existe dans cette catégorie
 - 🎫 Vérifiez vos droits d'accès aux différentes cales
+
+</details>
+
+<details>
+<summary><strong>🛡️ Cloudflare bloque le passage</strong></summary>
+
+```
+    ⚔️ BOUCLIER ENNEMI DÉTECTÉ
+```
+
+Le site peut activer la protection Cloudflare en cas d'attaque DDoS. En temps normal, l'API est exclue de cette protection.
+
+**Solutions :**
+- ⏳ Patientez quelques heures, la protection est généralement temporaire
+- 🔄 Utilisez un proxy comme [Byparr](https://github.com/ThePhaseless/Byparr) ou [FlareSolverr](https://github.com/FlareSolverr/FlareSolverr)
+- ⚙️ Configurez le proxy dans Prowlarr sous **Settings** → **Indexers** → **FlareSolverr**
 
 </details>
 
