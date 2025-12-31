@@ -7,7 +7,7 @@ type: private
 encoding: UTF-8
 
 links:
-  - https://la-cale.space/api/external
+  - https://la-cale.space
 
 caps:
   categorymappings:
