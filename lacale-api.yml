@@ -85,7 +85,12 @@ search:
     details:
       text: /
     download:
-      selector: link
+      selector: infoHash
+      filters:
+        - name: prepend
+          args: "magnet:?xt=urn:btih:"
+        - name: append
+          args: "&tr=https://tracker.la-cale.space/announce?passkey={{ .Config.passkey }}"
     infohash:
       selector: infoHash
     size:
