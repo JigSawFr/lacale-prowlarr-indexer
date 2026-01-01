@@ -15,6 +15,7 @@ This document outlines the API enhancements that would make the indexer optimal 
 - [📡 Enhanced Response](#-enhanced-response)
 - [🔐 Authentication & Security](#-authentication--security)
 - [📈 Additional Endpoints](#-additional-endpoints)
+- [⚠️ Known Issues](#️-known-issues)
 - [🏆 Priority Summary](#-priority-summary)
 
 ---
@@ -287,6 +288,40 @@ GET /api/user?passkey=XXX
   "canDownload": true
 }
 ```
+
+---
+
+## ⚠️ Known Issues
+
+### 🔴 Category Filtering Not Working
+
+**Problem:** The `cat` parameter in the API doesn't work - it returns no results when used.
+
+**Impact:** 
+- The `cat` parameter is currently disabled in the indexer definition (commented out)
+- When Radarr/Sonarr sync with Prowlarr, they request content using category filters
+- Since category filtering doesn't work, the sync fails with:
+```
+No Results in configured categories. See FAQ Entry: Prowlarr will not sync X Indexer to App
+```
+
+
+### 🟠 Cloudflare Protection
+
+**Problem:** During DDoS attacks, La Cale may enable Cloudflare's anti-DDoS protection, which blocks automated API requests from Prowlarr.
+
+**Impact:** Prowlarr receives a `403` or `503` error with a Cloudflare challenge page, causing searches to fail:
+```
+Cloudflare protection detected for [La Cale (API)], Flaresolverr may be required.
+```
+
+**Current Workaround:** 
+- In normal conditions, the API endpoint is excluded from Cloudflare protection
+- When protection is active, users must configure a proxy like [Byparr](https://github.com/ThePhaseless/Byparr) or [FlareSolverr](https://github.com/FlareSolverr/FlareSolverr) in Prowlarr
+
+**Suggested Fix:** 
+- Whitelist API endpoints from Cloudflare protection permanently
+- Or provide an alternative API endpoint that bypasses Cloudflare (e.g., via a different subdomain)
 
 ---
 

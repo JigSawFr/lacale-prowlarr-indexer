@@ -7,7 +7,7 @@ type: private
 encoding: UTF-8
 
 links:
-  - https://la-cale.space/
+  - https://la-cale.space/api/external
 
 caps:
   categorymappings:
@@ -49,7 +49,7 @@ settings:
   - name: info_passkey
     type: info
     label: About your Passkey
-    default: "Your passkey can be found in your profile on la-cale.space."
+    default: "Your passkey can be found at <a href=\"https://la-cale.space/profile\" target=\"_blank\">https://la-cale.space/profile</a>"
 
 login:
   path: api/external
@@ -72,7 +72,7 @@ search:
   inputs:
     passkey: "{{ .Config.passkey }}"
     q: "{{ .Keywords }}"
-    cat: "{{ join .Categories \",\" }}"
+    # cat: "{{ join .Categories \",\" }}"
 
   rows:
     selector: $
@@ -93,16 +93,20 @@ search:
     date:
       selector: pubDate
       filters:
+        - name: append
+          args: " +00:00"
         - name: dateparse
-          args: "2006-01-02T15:04:05.999999999Z07:00"
+          args: "MM/dd/yyyy HH:mm:ss zzz"
     seeders:
       selector: seeders
     leechers:
       selector: leechers
     downloadvolumefactor:
-      text: 1
+      # 0 = Freeleech (download doesn't count)
+      text: 0
     uploadvolumefactor:
-      text: 1
+      # 2 = Double upload
+      text: 2
     minimumratio:
       text: 1.0
     minimumseedtime:
