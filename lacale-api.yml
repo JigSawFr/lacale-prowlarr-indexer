@@ -5,35 +5,43 @@ description: "La Cale is a French Private Tracker for Movies, TV, Music, Games, 
 language: fr-FR
 type: private
 encoding: UTF-8
+# Cloudflare may be enabled, FlareSolverr might be required
+requestDelay: 2
 
 links:
   - https://la-cale.space/
 
 caps:
   categorymappings:
-    # Ebooks
-    - {id: "BD", cat: Books/Comics, desc: "BD"}
-    - {id: "Romans", cat: Books/EBook, desc: "Romans"}
-    - {id: "Documentaires", cat: Books/Technical, desc: "Documentaires"}
-    # Movies
-    - {id: "Films HD", cat: Movies/HD, desc: "Films HD"}
-    - {id: "Animation", cat: Movies/Other, desc: "Animation"}
-    - {id: "Films 4K", cat: Movies/UHD, desc: "Films 4K"}
-    # Games
-    - {id: "PC", cat: PC/Games, desc: "PC"}
-    - {id: "Consoles", cat: Console, desc: "Consoles"}
-    # Software
-    - {id: "Linux", cat: PC/ISO, desc: "Linux"}
-    - {id: "Mac", cat: PC/Mac, desc: "Mac"}
-    - {id: "Windows", cat: PC/0day, desc: "Windows"}
-    # Music
-    - {id: "FLAC", cat: Audio/Lossless, desc: "FLAC"}
-    - {id: "MP3", cat: Audio/MP3, desc: "MP3"}
-    # TV
-    - {id: "Séries HD", cat: TV/HD, desc: "Séries HD"}
-    - {id: "Séries VOSTFR", cat: TV/Foreign, desc: "Séries VOSTFR"}
-    # XXX
-    - {id: "XXX", cat: XXX, desc: "XXX"}
+    # Vidéo
+    - {id: films, cat: Movies/Foreign, desc: "Films"}
+    - {id: series, cat: TV/Foreign, desc: "Séries TV"}
+    - {id: spectacles, cat: TV/Other, desc: "Spectacles"}
+    # Audio
+    - {id: music, cat: Audio/Foreign, desc: "Musique"}
+    - {id: audio-divers, cat: Audio/Other, desc: "Audio divers"}
+    # Jeux
+    - {id: pc, cat: PC/Games, desc: "PC"}
+    - {id: consoles, cat: Console, desc: "Consoles"}
+    - {id: jeux-mobiles, cat: PC/Mobile-Other, desc: "Jeux mobiles"}
+    # Applications
+    - {id: systemes, cat: PC/ISO, desc: "Systèmes"}
+    - {id: software, cat: PC/0day, desc: "Logiciels"}
+    # E-books
+    - {id: romans, cat: Books/EBook, desc: "Romans"}
+    - {id: bd, cat: Books/Comics, desc: "BD"}
+    - {id: documentaires, cat: Books/Technical, desc: "Documentaires"}
+    # E-books & Documents
+    - {id: livres, cat: Books/EBook, desc: "Livres"}
+    - {id: presse, cat: Books/Magazines, desc: "Presse"}
+    - {id: education, cat: Books/Technical, desc: "Éducation"}
+    # XXX (default: false to prevent accidental inclusion)
+    - {id: xxx-hetero, cat: XXX, desc: "XXX Hétéro", default: false}
+    - {id: xxx-gay, cat: XXX, desc: "XXX Gay", default: false}
+    - {id: xxx-lesbien, cat: XXX, desc: "XXX Lesbien", default: false}
+    - {id: xxx-trans, cat: XXX, desc: "XXX Trans", default: false}
+    # Autres
+    - {id: divers, cat: Other/Misc, desc: "Divers"}
 
   modes:
     search: [q]
@@ -49,7 +57,23 @@ settings:
   - name: info_passkey
     type: info
     label: About your Passkey
-    default: "Your passkey can be found at <a href=\"https://la-cale.space/profile\" target=\"_blank\">https://la-cale.space/profile</a>"
+    default: "Your passkey can be found on your <a href=\"https://la-cale.space/profile\" target=\"_blank\">profile page</a>. Never share it!"
+  - name: info_magnet
+    type: info
+    label: Magnet Links
+    default: "This indexer supports both .torrent files and magnet links. Enable 'Prefer Magnet URL' in Prowlarr settings to use magnets (avoids 401 errors). ⚠️ Magnet links do NOT work for cross-seeding!"
+  - name: info_flaresolverr
+    type: info
+    label: Cloudflare Protection
+    default: "This site may use Cloudflare protection. If you experience issues, configure <a href=\"https://github.com/FlareSolverr/FlareSolverr\" target=\"_blank\">FlareSolverr</a> or <a href=\"https://github.com/ThePhaseless/Byparr\" target=\"_blank\">Byparr</a> in Prowlarr settings."
+  - name: info_ratio
+    type: info
+    label: Ratio Requirements
+    default: "Minimum ratio: 1.0 | Minimum seed time: 48 hours | Currently: Global Freeleech + Double Upload active!"
+  - name: info_updates
+    type: info
+    label: Updates
+    default: "This is a custom indexer that requires manual updates. Get the latest version at <a href=\"https://github.com/JigSawFr/lacale-prowlarr-indexer\" target=\"_blank\">github.com/JigSawFr/lacale-prowlarr-indexer</a>"
 
 login:
   path: api/external
@@ -61,7 +85,7 @@ login:
     path: api/external
     inputs:
       passkey: "{{ .Config.passkey }}"
-      q: rambo
+      q: test
 
 search:
   paths:
@@ -72,31 +96,40 @@ search:
   inputs:
     passkey: "{{ .Config.passkey }}"
     q: "{{ .Keywords }}"
-    # cat: "{{ join .Categories \",\" }}"
+    # API accepts single category slug (e.g., films, series, music)
+    # Note: API returns max 50 results, sorted by date descending
+    cat: "{{ range .Categories }}{{.}}{{end}}"
 
   rows:
     selector: $
 
   fields:
+    _id:
+      selector: guid
     title:
       selector: title
     category:
       selector: category
     details:
-      text: /
-    download:
+      # Use download link as details page (API doesn't return page slug)
       selector: link
     infohash:
       selector: infoHash
+    download:
+      # Direct .torrent download link from API
+      selector: link
+    magneturl:
+      # Magnet link with tracker announce URL (used when "Prefer Magnet URL" is enabled)
+      # Note: Magnet links do NOT work for cross-seeding!
+      text: "magnet:?xt=urn:btih:{{ .Result.infohash }}&tr=https%3A%2F%2Ftracker.la-cale.space%2Fannounce%3Fpasskey%3D{{ .Config.passkey }}"
     size:
       selector: size
     date:
+      # API returns ISO 8601 format (e.g., 2026-01-01T12:00:00.000Z)
       selector: pubDate
       filters:
-        - name: append
-          args: " +00:00"
         - name: dateparse
-          args: "MM/dd/yyyy HH:mm:ss zzz"
+          args: "2006-01-02T15:04:05.999Z"
     seeders:
       selector: seeders
     leechers:

@@ -6,6 +6,19 @@
 
 <h1 align="center">🏴‍☠️ La Cale - Prowlarr Indexer</h1>
 
+---
+
+## 💎 Sponsor
+
+<p align="center">
+  <a href="https://torbox.app/subscription?referral=da9fde09-a917-4953-9214-93b8a12f0b58">
+    <img src="https://torbox.app/assets/logo-bb7a9579.svg" alt="TorBox" height="50"/>
+  </a>
+  <br/><br/>
+  <strong>⚡ Sponsored by <a href="https://torbox.app/subscription?referral=da9fde09-a917-4953-9214-93b8a12f0b58">TorBox</a></strong><br/>
+  Premium Torrent & Usenet Cloud Downloader - 80Gbps Speeds
+</p>
+
 <p align="center">
   <img src="https://readme-typing-svg.demolab.com?font=Pirata+One&size=24&pause=1000&color=D4AF37&center=true&vCenter=true&width=500&lines=Bienvenue+%C3%A0+bord%2C+moussaillon+!;Hissez+les+torrents+!;Le+butin+vous+attend..." alt="Typing SVG" />
 </p>
@@ -47,9 +60,12 @@
 |:-----------|:----:|
 | 🔌 API directe (pas de scraping) | ⚓ |
 | 🔑 Authentification par passkey | ⚓ |
-| 🏷️ Filtrage par cargaison | ⚓ |
-| 📦 Décodage JSON | ⚓ |
+| 🏷️ Filtrage par catégorie | ⚓ |
+| 📦 Décodage JSON natif | ⚓ |
 | 🔍 Recherche multi-modes | ⚓ |
+| 🎁 Freeleech global | ⚓ |
+| ⚡ Double Upload | ⚓ |
+| 🧲 Support Magnet intégré | ⚓ |
 
 ---
 
@@ -64,6 +80,10 @@ Copiez `lacale-api.yml` dans la cale de Prowlarr :
 | 🐧 Linux | `~/.config/Prowlarr/Definitions/Custom/` |
 | 🪟 Windows | `%AppData%\Prowlarr\Definitions\Custom\` |
 | 🐳 Docker | `/config/Definitions/Custom/` |
+
+> 💡 **Astuce Magnet :** L'indexer supporte les deux modes ! Activez **"Prefer Magnet URL"** dans Prowlarr (Settings → Indexers) pour utiliser les liens magnet au lieu des fichiers .torrent.
+>
+> ⚠️ **Attention :** Les liens magnet ne fonctionnent **PAS** pour le cross-seeding !
 
 ### Étape 2 — Relancer le navire
 
@@ -90,26 +110,28 @@ sudo systemctl restart prowlarr
 <tr><th>📚 Bibliothèque du bord</th><th>🎬 Salle de projection</th><th>📺 Quartier des séries</th></tr>
 <tr><td>
 
-| Cale | Butin |
-|:-----|:------|
-| BD | Bandes dessinées |
-| Romans | Livres |
-| Documentaires | Savoirs |
+| Cale | Slug |
+|:-----|:-----|
+| Romans | `romans` |
+| BD | `bd` |
+| Documentaires | `documentaires` |
+| Livres | `livres` |
+| Presse | `presse` |
+| Éducation | `education` |
 
 </td><td>
 
-| Cale | Butin |
-|:-----|:------|
-| Films HD | Haute qualité |
-| Films 4K | Ultra HD |
-| Animation | Dessins animés |
+| Cale | Slug |
+|:-----|:-----|
+| Films | `films` |
+| Séries TV | `series` |
+| Spectacles | `spectacles` |
 
 </td><td>
 
-| Cale | Butin |
-|:-----|:------|
-| Séries HD | Haute qualité |
-| Séries VOSTFR | Sous-titrées |
+| Cale | Slug |
+|:-----|:-----|
+| Séries TV | `series` |
 
 </td></tr>
 </table>
@@ -118,36 +140,45 @@ sudo systemctl restart prowlarr
 <tr><th>🎵 Taverne musicale</th><th>🎮 Salle de jeux</th><th>💻 Arsenal logiciel</th></tr>
 <tr><td>
 
-| Cale | Butin |
-|:-----|:------|
-| FLAC | Sans perte |
-| MP3 | Compressé |
+| Cale | Slug |
+|:-----|:-----|
+| Musique | `music` |
+| Audio divers | `audio-divers` |
 
 </td><td>
 
-| Cale | Butin |
-|:-----|:------|
-| PC | Jeux PC |
-| Consoles | Consoles |
+| Cale | Slug |
+|:-----|:-----|
+| PC | `pc` |
+| Consoles | `consoles` |
+| Jeux mobiles | `jeux-mobiles` |
 
 </td><td>
 
-| Cale | Butin |
-|:-----|:------|
-| Linux | Pingouin |
-| Mac | Pomme |
-| Windows | Fenêtres |
+| Cale | Slug |
+|:-----|:-----|
+| Systèmes | `systemes` |
+| Logiciels | `software` |
 
 </td></tr>
 </table>
 
 <table>
-<tr><th>🔞 Quartier interdit</th></tr>
+<tr><th>🔞 Quartier interdit</th><th>📦 Autres</th></tr>
 <tr><td>
 
-| Cale | Butin |
-|:-----|:------|
-| XXX | Réservé aux adultes |
+| Cale | Slug |
+|:-----|:-----|
+| Hétéro | `xxx-hetero` |
+| Gay | `xxx-gay` |
+| Lesbien | `xxx-lesbien` |
+| Trans | `xxx-trans` |
+
+</td><td>
+
+| Cale | Slug |
+|:-----|:-----|
+| Divers | `divers` |
 
 </td></tr>
 </table>
@@ -233,9 +264,19 @@ Tout marin volontaire est le bienvenu ! Vous pouvez :
 
 | Document | Description |
 |:---------|:------------|
+| 📖 [API_DOCUMENTATION.md](API_DOCUMENTATION.md) | Documentation complète de l'API La Cale |
+| 📜 [CHANGELOG.md](CHANGELOG.md) | Historique des modifications |
 | 📖 [CONTRIBUTING.md](CONTRIBUTING.md) | Guide pour rejoindre l'équipage |
 | 🛠️ [DEVELOPER.md](DEVELOPER.md) | Documentation technique |
 | 🚀 [API_IMPROVEMENTS.md](API_IMPROVEMENTS.md) | Suggestions d'améliorations pour l'API |
+
+---
+
+## 🏆 Contributeurs
+
+Un grand merci à tous les marins qui ont contribué à ce projet !
+
+Merci également à tous ceux qui ont signalé des bugs, proposé des améliorations ou simplement testé l'indexer. Chaque contribution compte ! 🏴‍☠️
 
 ---
 

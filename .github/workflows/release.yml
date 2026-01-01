@@ -1,0 +1,89 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Extract changelog for this version
+        id: changelog
+        run: |
+          # Extract the changelog section for this version
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          
+          # Try to find the version section in CHANGELOG.md
+          # This handles both [Unreleased] becoming a version and existing versions
+          CHANGELOG=$(awk -v ver="$VERSION" '
+            BEGIN { found=0; content="" }
+            /^## \[/ {
+              if (found) exit
+              if (index($0, ver) || (ver ~ /^v/ && index($0, substr(ver, 2)))) {
+                found=1
+                next
+              }
+            }
+            found && /^---$/ { exit }
+            found { content = content $0 "\n" }
+            END { print content }
+          ' CHANGELOG.md)
+          
+          # If no specific version found, use Unreleased section
+          if [ -z "$CHANGELOG" ]; then
+            CHANGELOG=$(awk '
+              BEGIN { found=0; content="" }
+              /^## \[Unreleased\]/ { found=1; next }
+              found && /^## \[/ { exit }
+              found && /^---$/ { exit }
+              found { content = content $0 "\n" }
+              END { print content }
+            ' CHANGELOG.md)
+          fi
+          
+          # Escape for GitHub Actions
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "CHANGELOG<<$EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "$EOF" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ steps.version.outputs.VERSION }}
+          body: |
+            ## 🏴‍☠️ La Cale Prowlarr Indexer ${{ steps.version.outputs.VERSION }}
+            
+            ${{ steps.changelog.outputs.CHANGELOG }}
+            
+            ---
+            
+            ### 📥 Installation
+            
+            1. Download `lacale-api.yml` below
+            2. Copy to your Prowlarr custom definitions folder:
+               - **Linux**: `~/.config/Prowlarr/Definitions/Custom/`
+               - **Windows**: `%AppData%\Prowlarr\Definitions\Custom\`
+               - **Docker**: `/config/Definitions/Custom/`
+            3. Restart Prowlarr
+            4. Add the indexer with your passkey
+            
+            ---
+            
+            📖 [Full Documentation](https://github.com/JigSawFr/lacale-prowlarr-indexer#readme) | 📜 [Changelog](https://github.com/JigSawFr/lacale-prowlarr-indexer/blob/main/CHANGELOG.md)
+          files: |
+            lacale-api.yml
+          draft: false
+          prerelease: ${{ contains(steps.version.outputs.VERSION, 'beta') || contains(steps.version.outputs.VERSION, 'alpha') }}
