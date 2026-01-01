@@ -87,9 +87,11 @@ search:
     category:
       selector: category
     details:
-      text: /
-    download:
       selector: link
+    _infohash:
+      selector: infoHash
+    download:
+      text: "magnet:?xt=urn:btih:{{ .Result._infohash }}&tr=https%3A%2F%2Ftracker.la-cale.space%2Fannounce%3Fpasskey%3D{{ .Config.passkey }}"
     infohash:
       selector: infoHash
     size:
