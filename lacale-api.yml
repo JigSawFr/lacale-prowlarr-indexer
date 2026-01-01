@@ -16,6 +16,7 @@ caps:
     - {id: "Romans", cat: Books/EBook, desc: "Romans"}
     - {id: "Documentaires", cat: Books/Technical, desc: "Documentaires"}
     # Movies
+    - {id: "Films", cat: Movies, desc: "Films"}
     - {id: "Films HD", cat: Movies/HD, desc: "Films HD"}
     - {id: "Animation", cat: Movies/Other, desc: "Animation"}
     - {id: "Films 4K", cat: Movies/UHD, desc: "Films 4K"}
@@ -29,11 +30,14 @@ caps:
     # Music
     - {id: "FLAC", cat: Audio/Lossless, desc: "FLAC"}
     - {id: "MP3", cat: Audio/MP3, desc: "MP3"}
+    - {id: "Musique", cat: Audio/Other, desc: "Musique"}
     # TV
+    - {id: "Séries TV", cat: TV, desc: "Séries TV"}
     - {id: "Séries HD", cat: TV/HD, desc: "Séries HD"}
     - {id: "Séries VOSTFR", cat: TV/Foreign, desc: "Séries VOSTFR"}
     # XXX
     - {id: "XXX", cat: XXX, desc: "XXX"}
+    - {id: "Hétéro", cat: XXX/Other, desc: "Hétéro"}
 
   modes:
     search: [q]
