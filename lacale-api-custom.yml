@@ -1,6 +1,6 @@
 ---
-id: lacale-api
-name: La Cale (API)
+id: lacale-api-custom
+name: La Cale (API) Custom
 description: 'La Cale is a French Private Tracker for Movies, TV, Music, Games, Software, Ebooks and XXX'
 language: fr-FR
 type: private

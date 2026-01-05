@@ -71,13 +71,15 @@
 
 ### Étape 1 — Charger les cartes de navigation
 
-Copiez `lacale-api.yml` dans la cale de Prowlarr :
+Copiez `lacale-api-custom.yml` dans la cale de Prowlarr :
 
 | Plateforme | Destination |
 |:-----------|:------------|
 | 🐧 Linux | `~/.config/Prowlarr/Definitions/Custom/` |
 | 🪟 Windows | `%AppData%\Prowlarr\Definitions\Custom\` |
 | 🐳 Docker | `/config/Definitions/Custom/` |
+
+> **Remarque** : Prowlarr inclut déjà un indexer `lacale-api`. Ce fichier utilise `id: lacale-api-custom` pour éviter le conflit et doit conserver un nom de fichier unique.
 
 ### Étape 2 — Relancer le navire
 
@@ -92,7 +94,7 @@ sudo systemctl restart prowlarr
 ### Étape 3 — Rejoindre l'équipage
 
 1. 🧭 Naviguez vers **Indexers** → **Add Indexer**
-2. 🔎 Cherchez **"La Cale"**
+2. 🔎 Cherchez **"La Cale (API) Custom"**
 3. 🔑 Entrez votre **passkey** (trouvable dans votre profil de marin sur la-cale.space)
 4. ✅ Cliquez **Test** puis **Save**
 

@@ -113,7 +113,7 @@ When adding new categories:
 
 ### 🖥️ Local Testing
 
-1. Copy `lacale-api.yml` to Prowlarr's custom definitions folder:
+1. Copy `lacale-api-custom.yml` to Prowlarr's custom definitions folder:
    - **Linux**: `~/.config/Prowlarr/Definitions/Custom/`
    - **Windows**: `%AppData%\Prowlarr\Definitions\Custom\`
    - **Docker**: `/config/Definitions/Custom/`

@@ -296,7 +296,7 @@ The site may use Cloudflare protection. If you experience issues:
 
 ### Prowlarr/Jackett
 
-Use the provided indexer definition: `lacale-api.yml`
+Use the provided indexer definition: `lacale-api-custom.yml`
 
 **Magnet Support**: The indexer includes both `.torrent` download links and magnet links. To use magnets:
 1. Go to **Settings → Indexers** in Prowlarr

@@ -19,7 +19,7 @@
 
 ```
 lacale-prowlarr-indexer/
-├── lacale-api.yml        # 🚢 Main indexer definition
+├── lacale-api-custom.yml # 🚢 Main indexer definition
 ├── README.md             # 📖 User documentation (pirate-themed!)
 ├── CONTRIBUTING.md       # 🤝 Contribution guidelines
 ├── DEVELOPER.md          # 🛠️ This file
@@ -32,7 +32,7 @@ lacale-prowlarr-indexer/
 
 ## 📄 Indexer Definition
 
-### File: `lacale-api.yml`
+### File: `lacale-api-custom.yml`
 
 The indexer uses the Cardigann v11 format for Prowlarr.
 
@@ -40,7 +40,7 @@ The indexer uses the Cardigann v11 format for Prowlarr.
 
 | Section | Purpose |
 |---------|---------|
-| `id` | Unique identifier (`lacale-api`) |
+| `id` | Unique identifier (`lacale-api-custom`) |
 | `name` | Display name in Prowlarr |
 | `description` | Tracker description |
 | `language` | `fr-FR` for French |
@@ -218,7 +218,7 @@ curl "https://la-cale.space/api/external?passkey=YOUR_KEY&q=test"
 
 1. 🔍 Identify the change needed
 2. 🌿 Create a feature branch
-3. ✏️ Modify `lacale-api.yml`
+3. ✏️ Modify `lacale-api-custom.yml`
 4. 🧪 Test thoroughly
 5. 📤 Submit pull request
 
